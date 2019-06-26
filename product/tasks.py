@@ -56,8 +56,6 @@ class AsyncFileUploaTask(Task):
         self.file_upload_obj.save()
         reader = csv.DictReader(open(file.path))
         for obj in reader:
-            import time
-            time.sleep(1)
             try:
                 self._create_product_entry(obj)
             except:

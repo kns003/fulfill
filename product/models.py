@@ -35,6 +35,7 @@ class ProductUploadData(AcmeBase):
             'success_count': self.success_count,
             'total_count': self.total_count,
             'percentage': str(int((self.success_count/self.total_count)*100))
+            if self.total_count else 0
         }
 
 class Webhook(AcmeBase):
