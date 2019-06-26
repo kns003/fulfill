@@ -19,8 +19,15 @@
     </div>
 </div>
 
-<h3 class="d-inline ">Product List</h3>
-<a class="btn btn-success" href="{% url 'product-create' %}" role="button">Add</a>
+<div class="row">
+  <div class="col-md-8">
+    <h3 class="d-inline ">Product List</h3>
+    <a class="btn btn-success" href="{% url 'product-create' %}" role="button">Add</a>
+  </div>
+  <div class="col-md-4">
+    <a class="btn btn-danger" href="{% url 'product-delete-all' %}" role="button">DELETE ALL</a>
+  </div>
+</div>
 <table class="table table-bordered mt-3">
   <thead>
     <tr>

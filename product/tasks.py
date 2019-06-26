@@ -1,23 +1,25 @@
 import csv
+import json
+import requests
 from celery import Task
+from celery import task
 from django.db.models import F
+from django.forms import model_to_dict
 from acme.celery import app
-from .models import ProductUploadData, Product
+from .models import ProductUploadData, Product, Webhook
 
 
 class AsyncFileUploaTask(Task):
+    """
+    Task which is used to upload the file in async way
+    """
     name = "async_file_upload_task"
 
     def run(self, **kwargs):
         try:
-            print('AsyncFileUploaTask')
-            self.base_fieldnames = [
-                'name', 'sku', 'description'
-            ]
             # get objects from kwargs
             self.file_upload_obj = self._get_required_objs_from_kwargs(**kwargs)
             print(self.file_upload_obj)
-
             file = self.file_upload_obj.file
             self._read_csv_file(file)
         except Exception as exception:
@@ -65,3 +67,12 @@ class AsyncFileUploaTask(Task):
 
 
 app.tasks.register(AsyncFileUploaTask())
+
+@task
+def post_webhook(webhook_id, instance_id):
+    webhook = Webhook.objects.get(id=webhook_id)
+    instance = Product.objects.get(id=instance_id)
+    try:
+        requests.post(webhook.url, json.dumps(model_to_dict(instance)))
+    except:
+        pass

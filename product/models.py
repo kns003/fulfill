@@ -5,6 +5,9 @@ from acme_core.models import AcmeBase
 # Create your models here.
 
 class Product(AcmeBase):
+    """
+    The main model which holds the data of Product
+    """
     sku = models.CharField(max_length=200, null=True, blank=True)
     SOURCE = (
         ('csv', 'Csv'),
@@ -19,6 +22,9 @@ class Product(AcmeBase):
         return reverse('product-list')
 
 class ProductUploadData(AcmeBase):
+    """
+    Model which contains file upload data
+    """
     file = models.FileField(upload_to='upload/')
     success_count = models.PositiveIntegerField(default=0)
     failed_count = models.PositiveIntegerField(default=0)
@@ -32,6 +38,9 @@ class ProductUploadData(AcmeBase):
         }
 
 class Webhook(AcmeBase):
+    """
+    Model to configure Webhook
+    """
     url = models.URLField(null=True, blank=True)
     EVENT_CHOICE = (
         ('product_created', 'Product Created'),

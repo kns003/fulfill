@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-
 <form id="upload-csv" enctype="multipart/form-data">
   <div class="form-group">
     <label for="exampleFormControlFile1">Upload Product File</label>
@@ -40,6 +38,7 @@ $(function(){
                     $("#progress-bar").text(event.data + '%');
                     $("#progress-bar").width(event.data + '%');
                 };
+                eventSource.close();
             }
         });
     });

@@ -4,9 +4,10 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from .models import ProductUploadData, Product, Webhook
 from .tasks import AsyncFileUploaTask
 
@@ -134,6 +135,7 @@ class WebhookUpdate(UpdateView):
         webhook = get_object_or_404(Webhook, pk=self.kwargs['webhook_id'])
         return webhook
 
-
-
-
+class ProductDeleteAll(View):
+    def get(self, request, *args, **kwargs):
+        Product.objects.all().delete()
+        return HttpResponseRedirect(reverse('product-list'))

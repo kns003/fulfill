@@ -1,3 +1,4 @@
 media/
 venv_fulfill/
 *.pyc
+.idea/*

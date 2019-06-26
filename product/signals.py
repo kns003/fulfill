@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.forms import model_to_dict
 from django.dispatch import receiver
 from .models import Product, Webhook
+from .tasks import post_webhook
 
 @receiver(post_save, sender=Product)
 def trigger_webhook(sender, instance, created, **kwargs):
@@ -15,9 +16,6 @@ def trigger_webhook(sender, instance, created, **kwargs):
         # get all webhooks for product creation
         webhooks = Webhook.objects.filter(is_active=True, event=event)
         for webhook in webhooks:
-            print('Triggering {} webhook with following data : {} on the url {}'.format(
+            print('Triggering {} webhook with following data : {} on the url {} \n\n'.format(
                 event, str(model_to_dict(instance)), str(webhook.url)))
-            try:
-                requests.post(webhook.url, json.dumps(model_to_dict(instance)))
-            except:
-                pass
+            post_webhook.delay(webhook.id, instance.id)
