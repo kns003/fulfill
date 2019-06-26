@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-3">
+    <div class="control-group">
+    <div class="row">
+        <form class="form-inline" action="{% url 'product-list' %}" method="get">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <input class="form-control form-control-md" type="text" placeholder="search" name="q">
+                    <select class="form-control form-control-md" name="is_active">
+                        <option value="true">Active</option>
+                        <option value="false">InActive</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" value="submit" class="btn btn-primary my-1">Submit</button>
+        </form>
+    </div>
+    </div>
+</div>
+
+<h3 class="d-inline ">Product List</h3>
+<a class="btn btn-success" href="{% url 'product-create' %}" role="button">Add</a>
+<table class="table table-bordered mt-3">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>SKU</th>
+      <th>Description</th>
+        <th>Delete?</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for prod in products %}
+      <tr>
+        <td><a href="{% url 'product-update' product_id=prod.id %}">{{ prod.name }}</a></td>
+        <td>{{ prod.sku }}</td>
+        <td>{{ prod.description }}</td>
+          <td><a class="btn btn-danger" href="{% url 'product-delete' product_id=prod.id %}" role="button">Delete</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class = "container">
+  <div class = "col-md-6">
+    {% if is_paginated %}
+      <ul class="pagination">
+          <li class="page-item">
+            {% if page_obj.has_previous %}
+              <li><a href="?page={{ page_obj.previous_page_number }}{%if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo;&nbsp;&nbsp;</a></li>
+            {% else %}
+              <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+          </li>
+
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span>&nbsp;&nbsp;</li>
+          {% else %}
+            <li><a href="?page={{ i }}{%if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ i }}</a>&nbsp;&nbsp;</li>
+          {% endif %}
+        {% endfor %}
+          <li class="page-item">
+            {% if page_obj.has_next %}
+              <li><a href="?page={{ page_obj.next_page_number }}{%if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&raquo;</a></li>
+            {% else %}
+              <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+          </li>
+      </ul>
+  </div>
+</div>
+    {% endif %}
+{% endblock content%}

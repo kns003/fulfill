@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="d-inline ">Webhook List</h3>
+<a class="btn btn-success" href="{% url 'webhook-add' %}" role="button">Add</a>
+<table class="table table-bordered mt-3">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Webhook URL</th>
+      <th>Event</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for webhook in webhooks %}
+      <tr>
+        <td><a href="{% url 'webhook-update' webhook_id=webhook.id %}">{{ webhook.name }}</a></td>
+        <td>{{ webhook.url }}</td>
+        <td>{{ webhook.event }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock content %}
